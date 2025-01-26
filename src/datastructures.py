@@ -1,36 +1,67 @@
-
-"""
-update this file to implement the following already declared methods:
-- add_member: Should add a member to the self._members list
-- delete_member: Should delete a member from the self._members list
-- update_member: Should update a member from the self._members list
-- get_member: Should return a member from the self._members list
-"""
 from random import randint
 
 class FamilyStructure:
     def __init__(self, last_name):
         self.last_name = last_name
 
-        # example list of members
         self._members = []
 
-    # read-only: Use this method to generate random members ID's when adding members into the list
+  
     def _generateId(self):
         return randint(0, 99999999)
 
     def add_member(self, member):
-        # fill this method and update the return
-        pass
+        """
+        Agrega un nuevo miembro a la familia.
+        Si no se proporciona un ID, se genera uno automáticamente.
+        """
+        if 'id' not in member:  
+            member['id'] = self._generateId()
+        member['last_name'] = self.last_name  
+        self._members.append(member)
+        return member  
 
     def delete_member(self, id):
-        # fill this method and update the return
-        pass
+        """
+        Elimina un miembro de la familia por su ID.
+        """
+        self._members = [member for member in self._members if member['id'] != id]
+        return {"message": f"Member with ID {id} deleted"}
+
+    def update_member(self, id, updates):
+        """
+        Actualiza un miembro de la familia por su ID.
+        """
+        for member in self._members:
+            if member['id'] == id:
+                member.update(updates)  
+                return member  
+        return {"error": "Member not found"}  
 
     def get_member(self, id):
-        # fill this method and update the return
-        pass
+        """
+        Obtiene un miembro de la familia por su ID.
+        """
+        for member in self._members:
+            if member['id'] == id:
+                return member
+        return {"error": "Member not found"}  
 
-    # this method is done, it returns a list with all the family members
+    
     def get_all_members(self):
         return self._members
+
+jackson_family = FamilyStructure('Jackson')
+
+initial_members = [
+    {"first_name": "John", "age": 33, "lucky_numbers": [7, 13, 22]},
+    {"first_name": "Jane", "age": 35, "lucky_numbers": [10, 14, 3]},
+    {"first_name": "Jimmy", "age": 5, "lucky_numbers": [1]}
+]
+
+for member in initial_members:
+    jackson_family.add_member(member)
+
+
+if __name__ == "__main__":
+    print("Miembros iniciales:", jackson_family.get_all_members())
